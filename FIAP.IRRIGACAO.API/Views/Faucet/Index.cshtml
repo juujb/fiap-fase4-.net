@@ -3,12 +3,19 @@
 <p>
     <a class="btn btn-primary" asp-controller="Faucet" asp-action="Create">Nova Torneira</a>
 </p>
+
+@if (!string.IsNullOrEmpty(TempData["mensagemSucesso"]?.ToString()))
+{
+    <div class="alert alert-warning" role="alert">@TempData["mensagemSucesso"]</div>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>Id</th>
+            <th>Nome</th>
+            <th>Nome do Local</th>
             <th>Status</th>
-            <th>Id do Local</th>
         </tr>
     </thead>
     <tbody>
@@ -19,10 +26,13 @@
                     <label>@item.Id</label>
                 </td>
                 <td>
-                    <label>@item.IsEnabled ? "Ligada" : "Desligada"</label>
+                    <label>@item.Name</label>
                 </td>
                 <td>
-                    <label>@item.LocationId</label>
+                    <label>@item.Location.Name</label>
+                </td>
+                <td>
+                    <label>@item.IsEnabled ? "Ligada" : "Desligada"</label>
                 </td>
                 <td>
                     <!-- asp-route-id é usado para informar o Id do Item selecionado. -->
