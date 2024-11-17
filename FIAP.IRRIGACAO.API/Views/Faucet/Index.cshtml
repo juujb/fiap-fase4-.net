@@ -1,0 +1,42 @@
+﻿@model IEnumerable<FaucetModel>
+<h1>Lista de Torneiras</h1>
+<p>
+    <a class="btn btn-primary" asp-controller="Faucet" asp-action="Create">Nova Torneira</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Status</th>
+            <th>Id do Local</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <label>@item.Id</label>
+                </td>
+                <td>
+                    <label>@item.IsEnabled ? "Ligada" : "Desligada"</label>
+                </td>
+                <td>
+                    <label>@item.LocationId</label>
+                </td>
+                <td>
+                    <!-- asp-route-id é usado para informar o Id do Item selecionado. -->
+                    <a asp-controller="Faucet"
+                       asp-action="Edit"
+                       asp-route-id="@item.Id">Editar</a>
+                    <a asp-controller="Faucet"
+                       asp-action="Detail"
+                       asp-route-id="@item.Id">Consultar</a>
+                    <a asp-controller="Faucet"
+                       asp-action="Delete"
+                       asp-route-id="@item.Id">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
