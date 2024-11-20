@@ -1,6 +1,7 @@
 ﻿using FIAP.IRRIGACAO.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace FIAP.IRRIGACAO.API.Controllers
@@ -8,16 +9,17 @@ namespace FIAP.IRRIGACAO.API.Controllers
     public class FaucetController : Controller
     {
         private readonly ILogger<FaucetController> _logger;
+        private readonly IEnumerable<FaucetModel> _faucetList;
 
         public FaucetController(ILogger<FaucetController> logger)
         {
             _logger = logger;
+            _faucetList = [new() { Id = 1, Name = "Teste", IsEnabled = true, Location = new LocationModel() { Id = 1, Name = "Praça" } }];
         }
 
         public IActionResult Index()
         {
-            IEnumerable<FaucetModel> faucetList = [new() { Id = 1, Name = "Teste", IsEnabled = true, Location = new LocationModel() { Id = 1, Name = "Teste" } }];
-            return View(faucetList);
+            return View(_faucetList);
         }
 
         [HttpGet]
@@ -25,15 +27,14 @@ namespace FIAP.IRRIGACAO.API.Controllers
         {
             var locationList = GetLocations();
 
-            var selectLocationList =
-                new SelectList(locationList,
-                                nameof(LocationModel.Id),
-                                nameof(LocationModel.Name));
+            ViewBag.LocationList = locationList
+                .Select(l => new SelectListItem
+                {
+                    Value = l.Id.ToString(),
+                    Text = l.Name
+                }).ToList();
 
-            ViewBag.LocationList = selectLocationList;
-
-            FaucetModel faucet = new() { Location = new LocationModel() { Name = "Teste" } };
-            return View(faucet);
+            return View();
         }
 
         [HttpPost]
@@ -55,7 +56,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
                                 nameof(LocationModel.Name));
 
             ViewBag.LocationList = selectLocationList;
-            var faucet = new FaucetModel() { Location = new LocationModel() { Id = id, Name = "Teste" } };
+            var faucet = _faucetList.First(faucet => faucet.Id == id);
 
             return View(faucet);
         }
@@ -64,6 +65,18 @@ namespace FIAP.IRRIGACAO.API.Controllers
         public IActionResult Edit(FaucetModel model)
         {
             TempData["mensagemSucesso"] = $"Os dados da torneira {model.Name} foram alterados com suceso";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var faucet = _faucetList.First(f => f.Id == id);
+            if (faucet != null)
+                TempData["mensagemSucesso"] = $"Os dados da Torneira {faucet.Name} foram removidos com sucesso";
+            else
+                TempData["mensagemSucesso"] = $"Torneira inexistente.";
+
             return RedirectToAction(nameof(Index));
         }
 

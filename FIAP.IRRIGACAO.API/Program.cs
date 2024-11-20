@@ -1,4 +1,13 @@
+using FIAP.IRRIGACAO.API.Data.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+
+builder.Services.AddDbContext<DatabaseContext>(
+    opt => opt.UseOracle(connectionString).EnableSensitiveDataLogging(true)
+);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
