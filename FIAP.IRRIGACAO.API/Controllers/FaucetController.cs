@@ -16,7 +16,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<FaucetModel> faucetList = [];
+            IEnumerable<FaucetModel> faucetList = [new() { Id = 1, Name = "Teste", IsEnabled = true, Location = new LocationModel() { Id = 1, Name = "Teste" } }];
             return View(faucetList);
         }
 
@@ -44,17 +44,41 @@ namespace FIAP.IRRIGACAO.API.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public static List<LocationModel> GetLocations()
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var locationList = GetLocations();
+
+            var selectLocationList =
+                new SelectList(locationList,
+                                nameof(LocationModel.Id),
+                                nameof(LocationModel.Name));
+
+            ViewBag.LocationList = selectLocationList;
+            var faucet = new FaucetModel() { Location = new LocationModel() { Id = id, Name = "Teste" } };
+
+            return View(faucet);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(FaucetModel model)
+        {
+            TempData["mensagemSucesso"] = $"Os dados da torneira {model.Name} foram alterados com suceso";
+            return RedirectToAction(nameof(Index));
+        }
+
+        private static List<LocationModel> GetLocations()
         {
             var locationList = new List<LocationModel>
             {
-                new LocationModel { Id = 1, Name = "Praça" },
-                new LocationModel { Id = 2, Name = "Escola" },
-                new LocationModel { Id = 3, Name = "Prefeitura" }
+                new() { Id = 1, Name = "Praça" },
+                new() { Id = 2, Name = "Escola" },
+                new() { Id = 3, Name = "Prefeitura" }
             };
 
             return locationList;
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
