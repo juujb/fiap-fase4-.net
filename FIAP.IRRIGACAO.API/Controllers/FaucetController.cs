@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using X.PagedList.Extensions;
 
 namespace FIAP.IRRIGACAO.API.Controllers
 {
@@ -21,9 +22,12 @@ namespace FIAP.IRRIGACAO.API.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            var faucetList = _context.Faucet.Include(f => f.Location).ToList();
+            int pageNumber = page ?? 1;
+            int pageSize = 10;
+
+            var faucetList = _context.Faucet.Include(f => f.Location).OrderBy(f => f.Name).ToPagedList(pageNumber, pageSize);
             return View(faucetList);
         }
 

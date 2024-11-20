@@ -1,4 +1,6 @@
-﻿@model IEnumerable<FaucetModel>
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@model IPagedList<FaucetModel>
 
 <div class="container mt-4">
     <h1 class="mb-4">Lista de Torneiras</h1>
@@ -55,4 +57,14 @@
             }
         </tbody>
     </table>
+    @if (Model.Any())
+    {
+        <div class="text-center">
+            @Html.PagedListPager(
+                     Model,
+                     page => Url.Action("Index", new { page }),
+                     new PagedListRenderOptions { DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded, DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded }
+                     )
+        </div>
+    }
 </div>
