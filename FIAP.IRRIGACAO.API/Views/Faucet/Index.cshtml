@@ -12,6 +12,11 @@
         <div class="alert alert-success" role="alert">@TempData["mensagemSucesso"]</div>
     }
 
+    @if (!string.IsNullOrEmpty(TempData["mensagemErro"]?.ToString()))
+    {
+        <div class="alert alert-error" role="alert">@TempData["mensagemErro"]</div>
+    }
+
     <table class="table table-bordered table-hover table-striped">
         <thead class="table-primary">
             <tr>
@@ -30,8 +35,8 @@
                     <td>@item.Name</td>
                     <td>@item.Location.Name</td>
                     <td>
-                        <span class="badge @(item.IsEnabled ? "bg-success" : "bg-danger")">
-                            @(item.IsEnabled ? "Ligada" : "Desligada")
+                        <span class="badge @(item.IsEnabled == "true" ? "bg-success" : "bg-danger")">
+                            @(item.IsEnabled == "true" ? "Ligada" : "Desligada")
                         </span>
                     </td>
                     <td>

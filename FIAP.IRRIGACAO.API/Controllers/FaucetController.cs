@@ -1,4 +1,5 @@
-﻿using FIAP.IRRIGACAO.API.Models;
+﻿using FIAP.IRRIGACAO.API.Data.Context;
+using FIAP.IRRIGACAO.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,46 +10,27 @@ namespace FIAP.IRRIGACAO.API.Controllers
     public class FaucetController : Controller
     {
         private readonly ILogger<FaucetController> _logger;
-        private readonly IEnumerable<FaucetModel> _faucetList;
+        private readonly DatabaseContext _context;
 
-        public FaucetController(ILogger<FaucetController> logger)
+        public FaucetController(
+            ILogger<FaucetController> logger,
+            DatabaseContext context
+        )
         {
             _logger = logger;
-            _faucetList = [new() { Id = 1, Name = "Teste", IsEnabled = true, Location = new LocationModel() { Id = 1, Name = "Praça" } }];
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View(_faucetList);
+            var faucetList = _context.Faucet.Include(f => f.Location).ToList();
+            return View(faucetList);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            var locationList = GetLocations();
-
-            ViewBag.LocationList = locationList
-                .Select(l => new SelectListItem
-                {
-                    Value = l.Id.ToString(),
-                    Text = l.Name
-                }).ToList();
-
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Create(FaucetModel model)
-        {
-            Console.WriteLine("Gravando a torneira");
-            TempData["mensagemSucesso"] = $"A Torneira de Id {model.Id} foi cadastrada com suceso";
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var locationList = GetLocations();
+            var locationList = _context.Location.ToList();
 
             var selectLocationList =
                 new SelectList(locationList,
@@ -56,7 +38,36 @@ namespace FIAP.IRRIGACAO.API.Controllers
                                 nameof(LocationModel.Name));
 
             ViewBag.LocationList = selectLocationList;
-            var faucet = _faucetList.First(faucet => faucet.Id == id);
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(FaucetModel model)
+        {
+            _context.Faucet.Add(model);
+            _context.SaveChanges();
+            TempData["mensagemSucesso"] = $"A torneira {model.Name} foi cadastrada com suceso";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Edit(long id)
+        {
+            var faucet = _context.Faucet.Find(id);
+
+            if (faucet == null)
+                return NotFound();
+
+            var locationList = _context.Location.ToList();
+
+            var selectLocationList =
+                new SelectList(locationList,
+                                nameof(LocationModel.Id),
+                                nameof(LocationModel.Name),
+                                faucet.LocationId);
+            
+            ViewBag.LocationList = selectLocationList;
 
             return View(faucet);
         }
@@ -64,34 +75,28 @@ namespace FIAP.IRRIGACAO.API.Controllers
         [HttpPost]
         public IActionResult Edit(FaucetModel model)
         {
+            _context.Faucet.Update(model);
+            _context.SaveChanges();
             TempData["mensagemSucesso"] = $"Os dados da torneira {model.Name} foram alterados com suceso";
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(long id)
         {
-            var faucet = _faucetList.First(f => f.Id == id);
+            var faucet = _context.Faucet.Find(id);
             if (faucet != null)
-                TempData["mensagemSucesso"] = $"Os dados da Torneira {faucet.Name} foram removidos com sucesso";
+            {
+                _context.Faucet.Remove(faucet);
+                _context.SaveChanges();
+                TempData["mensagemSucesso"] = $"Os dados da torneira {faucet.Name} foram removidos com sucesso";
+            }
             else
-                TempData["mensagemSucesso"] = $"Torneira inexistente.";
-
+            {
+                TempData["mensagemSucesso"] = "Torneira inexistente.";
+            }
             return RedirectToAction(nameof(Index));
         }
-
-        private static List<LocationModel> GetLocations()
-        {
-            var locationList = new List<LocationModel>
-            {
-                new() { Id = 1, Name = "Praça" },
-                new() { Id = 2, Name = "Escola" },
-                new() { Id = 3, Name = "Prefeitura" }
-            };
-
-            return locationList;
-        }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
