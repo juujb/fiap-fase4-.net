@@ -9,14 +9,14 @@
         <a class="btn btn-primary" asp-controller="Faucet" asp-action="Create">Nova Torneira</a>
     </div>
 
-    @if (!string.IsNullOrEmpty(TempData["mensagemSucesso"]?.ToString()))
+    @if (!string.IsNullOrEmpty(TempData["SucessMessage"]?.ToString()))
     {
-        <div class="alert alert-success" role="alert">@TempData["mensagemSucesso"]</div>
+        <div class="alert alert-success" role="alert">@TempData["SucessMessage"]</div>
     }
 
-    @if (!string.IsNullOrEmpty(TempData["mensagemErro"]?.ToString()))
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"]?.ToString()))
     {
-        <div class="alert alert-error" role="alert">@TempData["mensagemErro"]</div>
+        <div class="alert alert-danger" role="alert">@TempData["ErrorMessage"]</div>
     }
 
     <table class="table table-bordered table-hover table-striped">
@@ -35,18 +35,22 @@
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Name</td>
-                    <td>@item.Location.Name</td>
+                    <td>@item.Location?.Name</td>
                     <td>
-                        <span class="badge @(item.IsEnabled == "true" ? "bg-success" : "bg-danger")">
-                            @(item.IsEnabled == "true" ? "Ligada" : "Desligada")
+                        <span class="badge @(item.IsEnabled == "True" ? "bg-success" : "bg-danger")">
+                            @(item.IsEnabled == "True" ? "Ligada" : "Desligada")
                         </span>
                     </td>
                     <td>
                         <div class="d-flex gap-2">
                             <a class="btn btn-sm btn-outline-primary"
                                asp-controller="Faucet"
+                               asp-action="Details"
+                               asp-route-id="@item.Id">Detalhes</a>
+                            <a class="btn btn-sm btn-outline-warning"
+                               asp-controller="Faucet"
                                asp-action="Edit"
-                               asp-route-id="@item.Id">Editar</a>
+                               asp-route-id="@item.Id">Atualizar</a>
                             <a class="btn btn-sm btn-outline-danger"
                                asp-controller="Faucet"
                                asp-action="Delete"

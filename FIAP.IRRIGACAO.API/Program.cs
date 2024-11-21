@@ -1,3 +1,4 @@
+using AutoMapper;
 using FIAP.IRRIGACAO.API.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,17 @@ builder.Services.AddDbContext<DatabaseContext>(
     opt => opt.UseOracle(connectionString).EnableSensitiveDataLogging(true)
 );
 
+var mapperConfig = new AutoMapper.MapperConfiguration(c => {
+    c.AllowNullCollections = true;
+    c.AllowNullDestinationValues = true;
+    c.AddProfile(typeof(FaucetProfile));
+
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+
 // Add services to the container.
+builder.Services.AddAutoMapper(typeof(FaucetProfile));
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

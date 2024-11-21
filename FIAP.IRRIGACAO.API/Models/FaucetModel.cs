@@ -5,8 +5,10 @@
         public long Id { get; set; }
         public required string Name { get; set; }
         public required string IsEnabled { get; set; }
-        public long LocationId { get; set; }
-        public required LocationModel Location { get; set; }
+        public required long LocationId { get; set; }
+        public LocationModel? Location { get; set; }
+
+        public FaucetModel() { }
     }
 
 }
