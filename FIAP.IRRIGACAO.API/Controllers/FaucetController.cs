@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FIAP.IRRIGACAO.API.Data.Context;
+using FIAP.IRRIGACAO.API.Data.Repository;
 using FIAP.IRRIGACAO.API.Models;
+using FIAP.IRRIGACAO.API.Services;
 using FIAP.IRRIGACAO.API.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,27 +17,27 @@ namespace FIAP.IRRIGACAO.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILogger<FaucetController> _logger;
-        private readonly DatabaseContext _context;
+        private readonly IFaucetService _service;
+        private readonly ILocationService _locationService;
 
         public FaucetController(
             IMapper mapper,
             ILogger<FaucetController> logger,
-            DatabaseContext context
+            IFaucetService service,
+            ILocationService locationService
         )
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _service = service;
+            _locationService = locationService;
         }
 
         public IActionResult Index(int? page)
         {
             try
             {
-                int pageNumber = page ?? 1;
-                int pageSize = 10;
-
-                var faucetList = _context.Faucet.Include(f => f.Location).OrderByDescending(f => f.Id).ToPagedList(pageNumber, pageSize);
+                var faucetList = _service.GetAllPaged(page);
                 return View(faucetList);
             }
             catch (Exception ex)
@@ -43,7 +45,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
                 _logger.LogError(ex, "Erro ao carregar a lista de torneiras.");
                 TempData["ErrorMessage"] = $"Ocorreu um erro ao carregar os dados. Detalhes: {ex.Message}.";
 
-                return View(new PagedList<FaucetModel>(new List<FaucetModel>() , 1, 10));
+                return View(new PagedList<FaucetViewModel>([] , 1, 10));
             }
         }
 
@@ -52,7 +54,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
         {
             try
             {
-                var locationList = _context.Location.ToList();
+                var locationList = _locationService.GetAll();
 
                 var selectLocationList =
                     new SelectList(locationList,
@@ -79,15 +81,12 @@ namespace FIAP.IRRIGACAO.API.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var faucet = _mapper.Map<FaucetModel>(model);
-                    faucet.Location = _context.Location.Find(faucet.LocationId);
-                    _context.Add(faucet);
-                    _context.SaveChanges();
+                    _service.Create(model);
                     TempData["SucessMessage"] = $"A torneira {model.Name} foi cadastrada com suceso.";
                     return RedirectToAction(nameof(Index));
                 }
 
-                var locationList = _context.Location.ToList();
+                var locationList = _locationService.GetAll();
 
                 var selectLocationList =
                     new SelectList(locationList,
@@ -113,12 +112,12 @@ namespace FIAP.IRRIGACAO.API.Controllers
         {
             try
             {
-                var faucet = _context.Faucet.Find(id);
+                var faucet = _service.FindById(id);
 
                 if (faucet == null)
                     return NotFound();
 
-                var locationList = _context.Location.ToList();
+                var locationList = _locationService.GetAll();
 
                 var selectLocationList =
                     new SelectList(locationList,
@@ -128,7 +127,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
 
                 ViewBag.LocationList = selectLocationList;
 
-                return View(_mapper.Map<FaucetViewModel>(faucet));
+                return View(faucet);
             }
             catch (Exception ex)
             {
@@ -145,15 +144,12 @@ namespace FIAP.IRRIGACAO.API.Controllers
             {
                 if (ModelState.IsValid) 
                 {
-                    var faucet = _mapper.Map<FaucetModel>(model);
-                    faucet.Location = _context.Location.Find(faucet.LocationId);
-                    _context.Faucet.Update(faucet);
-                    _context.SaveChanges();
+                    _service.Update(model);
                     TempData["SucessMessage"] = $"Os dados da torneira {model.Name} foram alterados com suceso.";
                     return RedirectToAction(nameof(Index));
                 }
 
-                var locationList = _context.Location.ToList();
+                var locationList = _locationService.GetAll();
 
                 var selectLocationList =
                     new SelectList(locationList,
@@ -179,16 +175,12 @@ namespace FIAP.IRRIGACAO.API.Controllers
         {
             try
             {
-                var model = _context.Faucet.Find(id);
+                var model = _service.FindById(id);
 
                 if (model == null)
                     return NotFound();
 
-                var faucet = _mapper.Map<FaucetViewModel>(model);
-
-                faucet.LocationName = _context.Location.Find(faucet.LocationId)?.Name;
-
-                return View(faucet);
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -203,16 +195,11 @@ namespace FIAP.IRRIGACAO.API.Controllers
         {
             try 
             { 
-                var faucet = _context.Faucet.Find(id);
+                var faucet = _service.Delete(id);
 
-                if (faucet == null) 
-                {
-                    TempData["ErrorMessage"] = "Torneira inexistente.";
-                    return RedirectToAction(nameof(Index));
-                }
+                if (faucet == null)
+                    return NotFound();
 
-                _context.Faucet.Remove(faucet);
-                _context.SaveChanges();
                 TempData["SucessMessage"] = $"Os dados da torneira {faucet.Name} foram removidos com sucesso.";
 
                 return RedirectToAction(nameof(Index));

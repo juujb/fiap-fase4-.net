@@ -1,6 +1,6 @@
 ﻿@using X.PagedList.Mvc.Core
 @using X.PagedList
-@model IPagedList<FaucetModel>
+@model IPagedList<FIAP.IRRIGACAO.API.ViewModels.FaucetViewModel>
 
 <div class="container mt-4">
     <h1 class="mb-4">Lista de Torneiras</h1>
@@ -35,10 +35,10 @@
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Name</td>
-                    <td>@item.Location?.Name</td>
+                    <td>@item.LocationName</td>
                     <td>
-                        <span class="badge @(item.IsEnabled == "True" ? "bg-success" : "bg-danger")">
-                            @(item.IsEnabled == "True" ? "Ligada" : "Desligada")
+                        <span class="badge @(item.IsEnabled ? "bg-success" : "bg-danger")">
+                            @(item.IsEnabled ? "Ligada" : "Desligada")
                         </span>
                     </td>
                     <td>
