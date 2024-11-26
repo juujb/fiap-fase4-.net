@@ -1,0 +1,36 @@
+﻿@model FIAP.IRRIGACAO.API.ViewModels.LoginViewModel
+
+<h1>Login</h1>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(TempData["SucessMessage"]?.ToString()))
+{
+    <div class="alert alert-success" role="alert">@TempData["SucessMessage"]</div>
+}
+
+<form asp-action="Login" method="post">
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" class="form-control" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-check">
+        <input asp-for="RememberMe" class="form-check-input" />
+        <label asp-for="RememberMe" class="form-check-label">Lembrar-me</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Entrar</button>
+</form>

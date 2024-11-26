@@ -4,6 +4,7 @@ using FIAP.IRRIGACAO.API.Data.Repository;
 using FIAP.IRRIGACAO.API.Models;
 using FIAP.IRRIGACAO.API.Services;
 using FIAP.IRRIGACAO.API.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             try
@@ -75,6 +77,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(FaucetViewModel model)
         {
             try
@@ -108,6 +111,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Edit(long id)
         {
             try
@@ -138,6 +142,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Edit(FaucetViewModel model)
         {
             try
@@ -171,6 +176,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Details(long id)
         {
             try
@@ -191,6 +197,7 @@ namespace FIAP.IRRIGACAO.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Delete(long id)
         {
             try 

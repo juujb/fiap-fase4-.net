@@ -1,7 +1,9 @@
 using AutoMapper;
 using FIAP.IRRIGACAO.API.Data.Context;
 using FIAP.IRRIGACAO.API.Data.Repository;
+using FIAP.IRRIGACAO.API.Models;
 using FIAP.IRRIGACAO.API.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,16 @@ var mapperConfig = new AutoMapper.MapperConfiguration(c => {
     c.AllowNullDestinationValues = true;
     c.AddProfile(typeof(FaucetProfile));
 
+});
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<DatabaseContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
 });
 
 IMapper mapper = mapperConfig.CreateMapper();
