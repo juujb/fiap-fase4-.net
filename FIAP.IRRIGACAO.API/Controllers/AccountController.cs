@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using FIAP.IRRIGACAO.API.Models;
 using FIAP.IRRIGACAO.API.ViewModels;
-using FIAP.IRRIGACAO.API.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 public class AccountController : Controller
 {

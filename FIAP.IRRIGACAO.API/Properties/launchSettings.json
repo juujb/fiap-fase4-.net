@@ -28,12 +28,19 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "launchUrl": "http://localhost:8080",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "8081",
         "ASPNETCORE_HTTP_PORTS": "8080"
       },
       "publishAllPorts": true,
+      "httpPort": 8080,
+      "dockerOptions": {
+        "ports": [
+          "8080:8080",
+          "8081:8081"
+        ]
+      },
       "useSSL": true
     }
   },

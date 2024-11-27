@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FIAP.IRRIGACAO.API.Data.Context;
 using FIAP.IRRIGACAO.API.Data.Repository;
 using FIAP.IRRIGACAO.API.Models;
 using FIAP.IRRIGACAO.API.Services;
@@ -7,10 +6,8 @@ using FIAP.IRRIGACAO.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using X.PagedList;
-using X.PagedList.Extensions;
 
 namespace FIAP.IRRIGACAO.API.Controllers
 {
