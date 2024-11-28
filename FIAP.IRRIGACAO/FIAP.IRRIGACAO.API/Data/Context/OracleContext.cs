@@ -1,4 +1,4 @@
-﻿using FIAP.IRRIGACAO.API.Models;
+﻿using FIAP.IRRIGACAO.API.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

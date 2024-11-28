@@ -1,6 +1,6 @@
-﻿using FIAP.IRRIGACAO.API.Models;
+﻿using FIAP.IRRIGACAO.API.Model;
 
-namespace FIAP.IRRIGACAO.API.Repository.Interfaces
+namespace FIAP.IRRIGACAO.API.Repository
 {
     public interface IFaucetRepository : IGenericRepository<FaucetModel>
     {
