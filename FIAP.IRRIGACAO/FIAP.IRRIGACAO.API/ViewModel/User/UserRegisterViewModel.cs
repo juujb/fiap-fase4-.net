@@ -2,14 +2,14 @@
 
 namespace FIAP.IRRIGACAO.API.ViewModel
 {
-    public class RegisterViewModel
+    public class UserRegisterViewModel
     {
         [Required(ErrorMessage = "O e-mail é obrigatório.")]
         [EmailAddress(ErrorMessage = "Insira um e-mail válido.")]
         public required string Email { get; set; }
 
         [Required(ErrorMessage = "A senha é obrigatória.")]
-        [StringLength(100, ErrorMessage = "A {0} deve ter pelo menos {2} e no máximo {1} caracteres.", MinimumLength = 6)]
+        [StringLength(12, ErrorMessage = "A senha deve ter pelo menos {2} e no máximo {1} caracteres.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public required string Password { get; set; }
 

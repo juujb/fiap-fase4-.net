@@ -1,8 +1,7 @@
 ﻿namespace FIAP.IRRIGACAO.API.Model
 {
-    public class LocationModel
+    public class LocationModel : BaseEntity
     {
-        public long Id { get; set; }
-        public required string Name { get; set; }
+        
     }
 }

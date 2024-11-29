@@ -2,8 +2,7 @@
 
 namespace FIAP.IRRIGACAO.API.Repository
 {
-    public interface ILocationRepository
+    public interface ILocationRepository : IGenericRepository<LocationModel>
     {
-        IEnumerable<LocationModel> GetAll();
     }
 }

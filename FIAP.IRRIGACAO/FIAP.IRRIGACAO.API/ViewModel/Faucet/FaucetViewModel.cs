@@ -1,15 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace FIAP.IRRIGACAO.API.ViewModel
 {
-    public class FaucetViewModel
+    public class FaucetViewModel : BaseViewModel
     {
-        public long Id { get; set; }
-
-        [Required(ErrorMessage = "O nome é obrigatório.")]
-        [StringLength(50, ErrorMessage = "O nome não pode exceder 50 caracteres.")]
-        public required string Name { get; set; }
-
         [Required(ErrorMessage = "O status é obrigatório.")]
         public required bool IsEnabled { get; set; }
 
@@ -19,6 +15,5 @@ namespace FIAP.IRRIGACAO.API.ViewModel
 
         public string? LocationName { get; set; }
 
-        public FaucetViewModel() { }
     }
 }

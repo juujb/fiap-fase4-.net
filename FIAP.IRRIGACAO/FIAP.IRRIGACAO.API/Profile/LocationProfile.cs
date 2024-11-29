@@ -8,6 +8,7 @@ namespace FIAP.IRRIGACAO.API.Profile
         public LocationProfile()
         {
             CreateMap<LocationViewModel, LocationModel>().ReverseMap();
+            CreateMap<LocationRegisterViewModel, LocationModel>();
         }
     }
 }

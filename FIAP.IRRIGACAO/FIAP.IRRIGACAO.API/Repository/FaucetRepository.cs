@@ -4,52 +4,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FIAP.IRRIGACAO.API.Repository
 {
-    public class FaucetRepository : IFaucetRepository
+    public class FaucetRepository : GenericRepository<FaucetModel>, IFaucetRepository
     {
         private readonly OracleContext _context;
 
-        public FaucetRepository(OracleContext context)
+        public FaucetRepository(OracleContext context) : base(context)
         {
             _context = context;
         }
 
-        public List<FaucetModel> GetAllPaged(int pageNumber, int pageSize)
+        public override List<FaucetModel> GetAll()
         {
-            return _context.Faucet.Include(c => c.Location).ToList();
+            return _context.Faucet
+                .Include(f => f.Location)
+                .ToList();
         }
 
-        public FaucetModel? FindById(long id)
+        public override List<FaucetModel> GetAllPaged(int pageNumber, int pageSize)
         {
-            var model = _context.Faucet.Include(f => f.Location).First(f => f.Id == id);
-
-            return model;
+            return _context.Faucet
+                .Include(f => f.Location)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
         }
 
-        public void Create(FaucetModel model)
+        public override FaucetModel? FindById(long id)
         {
-            model.Location = _context.Location.Find(model.LocationId);
-            _context.Faucet.Add(model);
-            _context.SaveChanges();
-        }
-
-        public void Update(FaucetModel model)
-        {
-            model.Location = _context.Location.Find(model.LocationId);
-            _context.Faucet.Update(model);
-            _context.SaveChanges();
-        }
-
-        public FaucetModel? DeleteAndReturn(long id)
-        {
-            var model = _context.Faucet.Find(id);
-
-            if (model == null)
-                return null;
-
-            _context.Faucet.Remove(model);
-            _context.SaveChanges();
-
-            return model;
+            return _context.Faucet
+                .Include(f => f.Location)
+                .FirstOrDefault(f => f.Id == id);
         }
     }
+
 }

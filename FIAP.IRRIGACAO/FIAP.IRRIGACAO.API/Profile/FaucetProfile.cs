@@ -9,11 +9,14 @@ namespace FIAP.IRRIGACAO.API.Profile
         {
             CreateMap<FaucetViewModel, FaucetModel>()
                 .ForMember(dest => dest.IsEnabled, opt => opt.MapFrom(src => src.IsEnabled ? "True" : "False"))
-                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new LocationModel() { Id = src.Id, Name = src.LocationName! })).ReverseMap();
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new LocationModel() { Id = src.Id, Name = src.LocationName! }));
+
+            CreateMap<FaucetRegisterViewModel, FaucetModel>()
+                .ForMember(dest => dest.IsEnabled, opt => opt.MapFrom(src => src.IsEnabled ? "True" : "False"));
 
             CreateMap<FaucetModel, FaucetViewModel>()
                 .ForMember(dest => dest.IsEnabled, opt => opt.MapFrom(src => src.IsEnabled == "True"))
-                .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location!.Name)).ReverseMap();
+                .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location!.Name));
 
         }
     }

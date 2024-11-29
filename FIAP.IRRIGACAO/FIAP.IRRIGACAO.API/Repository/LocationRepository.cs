@@ -3,18 +3,11 @@ using FIAP.IRRIGACAO.API.Model;
 
 namespace FIAP.IRRIGACAO.API.Repository
 {
-    public class LocationRepository : ILocationRepository
+    public class LocationRepository : GenericRepository<LocationModel>, ILocationRepository
     {
-        private readonly OracleContext _context;
-
-        public LocationRepository(OracleContext context)
+        public LocationRepository(OracleContext context) : base(context)
         {
-            _context = context;
-        }
 
-        public IEnumerable<LocationModel> GetAll()
-        {
-            return _context.Location.ToList();
         }
 
     }
