@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.IRRIGACAO.API", "FIAP.IRRIGACAO.API\FIAP.IRRIGACAO.API.csproj", "{936AEA28-6863-42D7-AEAC-42B163DD9C31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIAP.IRRIGACAO.API.TEST", "FIAP.IRRIGACAO.API.TEST\FIAP.IRRIGACAO.API.TEST.csproj", "{00242168-3FB1-4DB1-B8F9-91EAEF1563B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{936AEA28-6863-42D7-AEAC-42B163DD9C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{936AEA28-6863-42D7-AEAC-42B163DD9C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{936AEA28-6863-42D7-AEAC-42B163DD9C31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00242168-3FB1-4DB1-B8F9-91EAEF1563B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00242168-3FB1-4DB1-B8F9-91EAEF1563B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00242168-3FB1-4DB1-B8F9-91EAEF1563B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00242168-3FB1-4DB1-B8F9-91EAEF1563B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
